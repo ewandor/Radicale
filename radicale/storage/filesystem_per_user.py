@@ -45,7 +45,7 @@ class Collection(filesystem.Collection):
     @property
     def _path(self):
         """Absolute path of the file at local ``path``."""
-        return os.path.join(self.get_folder(self.path), self.path.replace("/", os.sep))
+        return self.get_abs_path(self.path)
     
     @classmethod
     def get_owner(cls, path):
