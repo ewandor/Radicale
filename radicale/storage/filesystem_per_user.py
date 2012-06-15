@@ -53,13 +53,21 @@ class Collection(filesystem.Collection):
     
     @classmethod
     def get_folder(cls, path):
-        home = pwd.getpwnam(cls.get_owner(path))[5]
-        return home + config.get("storage", "filesystem_folder")[1:]
-    
+        owner = cls.get_owner(path)
+        if not owner:
+            return ''
+        elif owner == 'public_user':
+            return ''
+        elif owner == 'private_user':
+            return ''
+        else:
+            home = pwd.getpwnam(owner)[5]
+            return home + config.get("storage", "filesystem_folder")[1:]
+
     @classmethod
     def get_abs_path(cls, path):
         split_path = path.split('/')
-        if len(split_path) > 1: 
+        if len(split_path) > 1:
             return os.path.join(cls.get_folder(path), path.split('/')[1])
         else:
             return cls.get_folder(path)
