@@ -53,13 +53,13 @@ class Collection(filesystem.Collection):
         return split_path[0]
     
     @classmethod
-    def get_folder(cls, path):
-        home = pwd.getpwnam(cls.get_owner(path))[5]
+    def get_folder(cls, owner):
+        home = pwd.getpwnam(owner)[5]
         return home + config.get("storage", "filesystem_folder")[1:]
     
     @classmethod
-    def children(cls, path):
-        abs_path = os.path.join(cls.get_folder(path), path.replace("/", os.sep))
+    def children(cls, owner, path):
+        abs_path = os.path.join(cls.get_folder(owner), path.replace("/", os.sep))
         _, directories, files = next(os.walk(abs_path))
         for filename in directories + files:
             rel_filename = posixpath.join(path, filename)
@@ -67,13 +67,13 @@ class Collection(filesystem.Collection):
                 yield cls(rel_filename)
 
     @classmethod
-    def is_node(cls, path):
-        abs_path = os.path.join(cls.get_folder(path), path.replace("/", os.sep))
+    def is_node(cls, owner, path):
+        abs_path = os.path.join(cls.get_folder(owner), path.replace("/", os.sep))
         return os.path.isdir(abs_path)
 
     @classmethod
-    def is_leaf(cls, path):
-        abs_path = os.path.join(cls.get_folder(path), path.replace("/", os.sep))
+    def is_leaf(cls, owner, path):
+        abs_path = os.path.join(cls.get_folder(owner), path.replace("/", os.sep))
         return os.path.isfile(abs_path) and not abs_path.endswith(".props")
 
 ical.Collection = Collection
