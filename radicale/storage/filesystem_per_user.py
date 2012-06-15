@@ -58,8 +58,12 @@ class Collection(filesystem.Collection):
     
     @classmethod
     def get_abs_path(cls, path):
-        ressource_folder = path.split('/')[1]
-        return os.path.join(cls.get_folder(path), ressource_folder)
+        split_path = path.split('/')
+        if len(split_path) > 1: 
+            return os.path.join(cls.get_folder(path), path.split('/')[1])
+        else:
+            return cls.get_folder(path)
+        
     
     @classmethod
     def children(cls, path):
