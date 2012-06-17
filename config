@@ -116,14 +116,16 @@ file = ~/.config/radicale/rights
 
 [storage]
 # Storage backend
-# Value: filesystem | multifilesystem | database | custom
-type = filesystem
+# Value: filesystem | multifilesystem | database | custom | filesystem_per_user
+type = filesystem_per_user
 
 # Custom storage handler
 custom_handler =
 
 # Folder for storing local collections, created if not present
 filesystem_folder = ~/.config/radicale/collections
+public folder     = /var/calendar/public
+private folder    = /var/calendar/private
 
 # Database URL for SQLAlchemy
 # dialect+driver://user:password@host/dbname[?key=value..]

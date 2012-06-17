@@ -57,9 +57,9 @@ class Collection(filesystem.Collection):
         if not owner:
             return ''
         elif owner == 'public_user':
-            return ''
+            return config.get("storage", "public_folder")
         elif owner == 'private_user':
-            return ''
+            return config.get("storage", "private_folder")
         else:
             home = pwd.getpwnam(owner)[5]
             return home + config.get("storage", "filesystem_folder")[1:]

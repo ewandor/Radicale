@@ -80,11 +80,15 @@ INITIAL_CONFIG = {
         "custom_handler": "",
         "file": "~/.config/radicale/rights"},
     "storage": {
-        "type": "filesystem",
+        "filesystem_folder":
+            os.path.expanduser("~/.config/radicale/collections"),
         "custom_handler": "",
         "filesystem_folder": os.path.expanduser(
             "~/.config/radicale/collections"),
-        "database_url": ""},
+        "database_url": "",
+        "public folder": "/var/calendar/public",
+        "public folder": "/var/calendar/private"
+    },
     "logging": {
         "config": "/etc/radicale/logging",
         "debug": "False",
