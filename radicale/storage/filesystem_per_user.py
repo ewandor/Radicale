@@ -47,6 +47,18 @@ class Collection(filesystem.Collection):
         """Absolute path of the file at local ``path``."""
         return self.get_abs_path(self.path)
     
+    def _create_dirs(self):
+        """Create folder storing the collection if absent."""
+        if not os.path.exists(os.path.dirname(self._path)):
+            os.makedirs(os.path.dirname(self._path))
+
+    def save(self, text):
+        self._create_dirs()
+        open(self._path, "w").write(text)
+        owner = self.get_owner(self.path)
+        if owner and owner != 'public_user' and owner != 'private_user': 
+            os.chown(self._path(),pwd.getpwnam(owner)[2], pwd.getpwnam(owner)[3])
+    
     @classmethod
     def get_owner(cls, path):
         return path.split("/")[0]
