@@ -19,6 +19,7 @@ import codecs
 import os 
 import pwd
 import posixpath
+import json
 from contextlib import contextmanager
 
 from radicale import config, ical
@@ -107,11 +108,20 @@ class Collection(filesystem.Collection):
     @property
     @contextmanager
     def props(self):
-        props = super(Collection,self)
+        # On enter
+        properties = {}
+        if os.path.exists(self._props_path):
+            with open(self._props_path) as prop_file:
+                properties.update(json.load(prop_file))
+        yield properties
+        # On exit
+        self._create_dirs()
+        with open(self._props_path, "w") as prop_file:
+            json.dump(properties, prop_file)
         owner = self.get_owner(self.path)
+        
         if owner and owner != 'public_user' and owner != 'private_user': 
             os.chown(self._props_path,pwd.getpwnam(owner)[2], pwd.getpwnam(owner)[3])
-        return props
         
 
 ical.Collection = Collection
