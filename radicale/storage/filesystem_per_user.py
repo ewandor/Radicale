@@ -107,10 +107,11 @@ class Collection(filesystem.Collection):
     @property
     @contextmanager
     def props(self):
-        super(Collection,self)
+        props = super(Collection,self)
         owner = self.get_owner(self.path)
         if owner and owner != 'public_user' and owner != 'private_user': 
             os.chown(self._props_path,pwd.getpwnam(owner)[2], pwd.getpwnam(owner)[3])
+        return props
         
 
 ical.Collection = Collection
