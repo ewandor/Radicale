@@ -19,6 +19,7 @@ import codecs
 import os 
 import pwd
 import posixpath
+from contextlib import contextmanager
 
 from radicale import config, ical
 from radicale.storage import filesystem
@@ -53,8 +54,7 @@ class Collection(filesystem.Collection):
             os.makedirs(os.path.dirname(self._path))
 
     def save(self, text):
-        self._create_dirs()
-        open(self._path, "w").write(text)
+        super(Collection,self).save(text)
         owner = self.get_owner(self.path)
         if owner and owner != 'public_user' and owner != 'private_user': 
             os.chown(self._path,pwd.getpwnam(owner)[2], pwd.getpwnam(owner)[3])
@@ -103,5 +103,14 @@ class Collection(filesystem.Collection):
     def is_leaf(cls, path):
         abs_path = cls.get_abs_path(path)
         return os.path.isfile(abs_path) and not abs_path.endswith(".props")
+    
+    @property
+    @contextmanager
+    def props(self):
+        super(Collection,self)
+        owner = self.get_owner(self.path)
+        if owner and owner != 'public_user' and owner != 'private_user': 
+            os.chown(self._props_path,pwd.getpwnam(owner)[2], pwd.getpwnam(owner)[3])
+        
 
 ical.Collection = Collection
