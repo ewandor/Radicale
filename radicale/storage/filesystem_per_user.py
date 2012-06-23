@@ -57,7 +57,7 @@ class Collection(filesystem.Collection):
         open(self._path, "w").write(text)
         owner = self.get_owner(self.path)
         if owner and owner != 'public_user' and owner != 'private_user': 
-            os.chown(self._path(),pwd.getpwnam(owner)[2], pwd.getpwnam(owner)[3])
+            os.chown(self._path,pwd.getpwnam(owner)[2], pwd.getpwnam(owner)[3])
     
     @classmethod
     def get_owner(cls, path):
